@@ -1,0 +1,9 @@
+Aihe: Shakki
+Toteutetaan Shakki peli. 
+Pelin on tarkoitus toimia mahdollisimman tarkasti varsinaisen lautapelin sääntöjen mukaisesti. Mahdollisest lautapeliversioon nähden puuttuvat sekä tietokoneversiolle uniikit toiminnot tarkentuvat projektin edetessä.
+
+Käyttäjät: Pelin pelaajat
+
+Käyttäjien toiminnot:
+	pelin aloittaminen
+	Pelin pelaaminen nappuloita siirtämällä
