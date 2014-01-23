@@ -1,4 +1,4 @@
-package shakki.domain;
+package com.marktuom.shakki.domain;
 
 /**
  *
@@ -28,11 +28,11 @@ public class Sijainti {
     }
     
     public int xErotus(Sijainti piste){
-        return this.x - piste.y;
+        return piste.getX() - this.x;
     }
     
     public int yErotus(Sijainti piste){
-        return this.x - piste.y;
+        return piste.getY() - this.y;
     }
     
       public int xMuutos(Sijainti piste){

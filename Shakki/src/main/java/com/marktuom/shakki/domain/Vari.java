@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package shakki.domain;
+package com.marktuom.shakki.domain;
 
 /**
  *
@@ -22,7 +22,5 @@ public enum Vari {
     public int getArvo() {
         return arvo;
     }
-    
-    
-    
+
 }

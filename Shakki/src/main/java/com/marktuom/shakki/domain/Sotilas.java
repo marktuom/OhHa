@@ -1,5 +1,5 @@
 
-package shakki.domain;
+package com.marktuom.shakki.domain;
 
 /**
  *
@@ -16,6 +16,10 @@ public class Sotilas extends Nappula{
     
     public void liiku(){
         siirtoja++;
+    }
+
+    public int getSiirtoja() {
+        return siirtoja;
     }
     
     

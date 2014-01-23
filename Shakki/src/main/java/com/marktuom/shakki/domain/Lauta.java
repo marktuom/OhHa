@@ -1,5 +1,5 @@
 
-package shakki.domain;
+package com.marktuom.shakki.domain;
 
 /**
  *
