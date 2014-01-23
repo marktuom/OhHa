@@ -1,5 +1,7 @@
 To 16.1. Klo. 13:00-14:00
 	Projektin Luominen, tarvittavien ohjelmistojen asentaminen sek‰ k‰ytett‰viin 	j‰rjestelmiin kirjautuminen
 
-To 23.1. Klo. 13:00 - 
+To 23.1. Klo. 13:00 - 20:00
 	M‰‰rittelyvaiheen Luokkakaavio
+	Testej‰
+	Koodia
