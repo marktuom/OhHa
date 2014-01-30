@@ -17,6 +17,6 @@ public abstract class Nappula {
     public Vari getVari() {
         return vari;
     }
-    
+        
     
 }

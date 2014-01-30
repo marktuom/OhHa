@@ -58,7 +58,7 @@ public class RatsuTest {
         s2 = new Sijainti(5, 4);
         assertEquals(true, r1.voiLiikkua(s1, s2));
         
-         s2 = new Sijainti(5, 4);
+         s2 = new Sijainti(4, 5);
         assertEquals(true, r1.voiLiikkua(s1, s2));
         
         s2 = new Sijainti(5, 5);

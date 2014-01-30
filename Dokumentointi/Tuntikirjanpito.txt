@@ -5,3 +5,8 @@ To 23.1. Klo. 13:00 - 20:00
 	M‰‰rittelyvaiheen Luokkakaavio
 	Testej‰
 	Koodia
+To 30.1 klo. 14:00 - ~21:00
+	Uusi Luokkakaavio
+	Uusia testej‰ ja korjauksia vanhoihin testeihin
+	Uutta koodia l‰hinn‰ Lauta luokkaan
+	Paljon suunnittelua ja miettimist‰

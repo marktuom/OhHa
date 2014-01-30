@@ -1,5 +1,7 @@
 package com.marktuom.shakki;
 
+import com.marktuom.shakki.domain.*;
+
 /**
  * Hello world!
  *
