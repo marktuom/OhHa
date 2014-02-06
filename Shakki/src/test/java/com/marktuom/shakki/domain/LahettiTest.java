@@ -5,9 +5,7 @@
  */
 package com.marktuom.shakki.domain;
 
-import com.marktuom.shakki.domain.Lahetti;
-import com.marktuom.shakki.domain.Vari;
-import com.marktuom.shakki.domain.Sijainti;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,10 +18,9 @@ import static org.junit.Assert.*;
  * @author Markus
  */
 public class LahettiTest {
-
-    Lahetti l1;
-    Sijainti s1;
-    Sijainti s2;
+    Lauta l1;
+    Lahetti lah1;
+    Ruutu r1;
 
     public LahettiTest() {
     }
@@ -38,31 +35,35 @@ public class LahettiTest {
 
     @Before
     public void setUp() {
-        l1 = new Lahetti(Vari.MUSTA);
-        s1 = new Sijainti(2, 2);
+        l1 = new Lauta();
+        r1 = l1.getRuutu(4, 4);
+        lah1 = new Lahetti(l1,r1, Vari.MUSTA);
+        
     }
 
     @After
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+  
     @Test
-    public void TestVoiLiikkua() {
-        s2 = new Sijainti(3, 3);
-        assertEquals(true, l1.voiLiikkua(s1, s2));
-
-        s2 = new Sijainti(4, 0);
-        assertEquals(true, l1.voiLiikkua(s1, s2));
-
-        s2 = new Sijainti(1, 2);
-        assertEquals(false, l1.voiLiikkua(s1, s2));
-
-        s2 = new Sijainti(5, 6);
-        assertEquals(false, l1.voiLiikkua(s1, s2));
+    public void TestMahdollisetSiirrot() {
+        ArrayList<Ruutu> kohteet = new ArrayList<>();
+        kohteet.add( l1.getRuutu(7, 7));
+        kohteet.add(l1.getRuutu(0, 0));
+        kohteet.add( l1.getRuutu(1, 7));
+        kohteet.add( l1.getRuutu(7, 1));
+       
+        assertEquals(true, lah1.mahdollisetSiirrot().containsAll(kohteet));
+        
+        r1 = l1.getRuutu(5, 5);
+        Nappula n1 = new Sotilas(l1, r1, Vari.MUSTA);
+        r1 = l1.getRuutu(6, 6);
+        assertEquals(false, lah1.mahdollisetSiirrot().contains(r1));
+        r1 = l1.getRuutu(5, 5);
+        assertEquals(false, lah1.mahdollisetSiirrot().contains(r1));
+        n1 = new Sotilas(l1, r1, Vari.VALKOINEN);
+        assertEquals(true, lah1.mahdollisetSiirrot().contains(r1));
+        
     }
 }

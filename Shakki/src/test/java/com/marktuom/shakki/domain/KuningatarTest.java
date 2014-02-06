@@ -6,9 +6,7 @@
 
 package com.marktuom.shakki.domain;
 
-import com.marktuom.shakki.domain.Kuningatar;
-import com.marktuom.shakki.domain.Vari;
-import com.marktuom.shakki.domain.Sijainti;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,9 +19,9 @@ import static org.junit.Assert.*;
  * @author Markus
  */
 public class KuningatarTest {
+    public Lauta l1;
     public Kuningatar k1;
-    public Sijainti s1;
-    public Sijainti s2;
+    public Ruutu r1;
     
     public KuningatarTest() {
     }
@@ -38,8 +36,9 @@ public class KuningatarTest {
     
     @Before
     public void setUp() {
-         k1 = new Kuningatar(Vari.MUSTA);
-         s1 = new Sijainti(4, 4);
+         l1 = new Lauta();
+         k1 = new Kuningatar(l1,l1.getRuutu(4, 4), Vari.MUSTA);
+         l1.getRuutu(4, 4).setNappula(k1);
     }
     
     @After
@@ -47,17 +46,28 @@ public class KuningatarTest {
     }
 
     @Test
-    public void TestVoiLiikkua(){
-        s2= new Sijainti(0, 4);
-        assertEquals(true, k1.voiLiikkua(s1, s2));
+    public void TestMahdollisetSiirrot(){
+        ArrayList<Ruutu> kohteet = new ArrayList<>();
+        kohteet.add(l1.getRuutu(4, 0));
+        kohteet.add(l1.getRuutu(0, 4));
+        kohteet.add(l1.getRuutu(4, 7));
+        kohteet.add(l1.getRuutu(7, 4));
+        kohteet.add( l1.getRuutu(7, 7));
+        kohteet.add(l1.getRuutu(0, 0));
+        kohteet.add( l1.getRuutu(1, 7));
+        kohteet.add( l1.getRuutu(7, 1));
+       
+        assertEquals(true, k1.mahdollisetSiirrot().containsAll(kohteet));
         
-        s2= new Sijainti(4, 0);
-        assertEquals(true, k1.voiLiikkua(s1, s2));
+        for (Ruutu ruutu : kohteet) {
+            ruutu.setNappula(new Sotilas(l1, ruutu, Vari.MUSTA));
+            assertEquals(false, k1.mahdollisetSiirrot().contains(ruutu));
+        }
         
-        s2= new Sijainti(7, 7);
-        assertEquals(true, k1.voiLiikkua(s1, s2));
+        for (Ruutu ruutu : kohteet) {
+            ruutu.setNappula(new Sotilas(l1, ruutu, Vari.VALKOINEN));
+            assertEquals(true, k1.mahdollisetSiirrot().contains(ruutu));
+        }
         
-        s2= new Sijainti(6, 3);
-        assertEquals(false, k1.voiLiikkua(s1, s2));
     }
 }

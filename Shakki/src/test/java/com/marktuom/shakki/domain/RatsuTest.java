@@ -10,6 +10,7 @@ package com.marktuom.shakki.domain;
 import com.marktuom.shakki.domain.Vari;
 import com.marktuom.shakki.domain.Ratsu;
 import com.marktuom.shakki.domain.Sijainti;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,9 +23,9 @@ import static org.junit.Assert.*;
  * @author Markus
  */
 public class RatsuTest {
-    Ratsu r1;
-    Sijainti s1;
-    Sijainti s2;
+    Lauta l1;
+    Ratsu rat1;
+    Ruutu r1;
     
     public RatsuTest() {
     }
@@ -39,8 +40,10 @@ public class RatsuTest {
     
     @Before
     public void setUp() {
-        r1 = new Ratsu(Vari.MUSTA);
-        s1= new Sijainti(3, 3);
+        l1 = new Lauta();
+        r1 = l1.getRuutu(2, 2);
+        rat1 = new Ratsu(l1, r1, Vari.MUSTA);
+     
     }
     
     @After
@@ -55,19 +58,22 @@ public class RatsuTest {
     
     @Test
     public void TestVoiLiikkua(){
-        s2 = new Sijainti(5, 4);
-        assertEquals(true, r1.voiLiikkua(s1, s2));
+        r1 = l1.getRuutu(4, 3);
+        Nappula n1 = new Sotilas(l1, r1, Vari.VALKOINEN);
         
-         s2 = new Sijainti(4, 5);
-        assertEquals(true, r1.voiLiikkua(s1, s2));
+        ArrayList<Ruutu> kohteet = new ArrayList<>();
+        kohteet.add(l1.getRuutu(0, 1));
+        kohteet.add(l1.getRuutu(0, 3));
+        kohteet.add(l1.getRuutu(4, 1));
+        kohteet.add(l1.getRuutu(4, 3));
+        kohteet.add(l1.getRuutu(1, 0));
+        kohteet.add(l1.getRuutu(1, 4));
+        kohteet.add(l1.getRuutu(3, 0));
+        kohteet.add(l1.getRuutu(3, 4));
         
-        s2 = new Sijainti(5, 5);
-        assertEquals(false, r1.voiLiikkua(s1, s2));
-        
-        s2 = new Sijainti(6, 3);
-        assertEquals(false, r1.voiLiikkua(s1, s2));
-        
-         s2 = new Sijainti(4, 4);
-        assertEquals(false, r1.voiLiikkua(s1, s2));
+        assertEquals(true, rat1.mahdollisetSiirrot().containsAll(kohteet));
+       
+        n1 = new Sotilas(l1, r1, Vari.MUSTA);
+        assertEquals(false, rat1.mahdollisetSiirrot().contains(r1));
     }
 }

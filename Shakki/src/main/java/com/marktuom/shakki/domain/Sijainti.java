@@ -1,7 +1,7 @@
 package com.marktuom.shakki.domain;
 
 /**
- *
+ * Apuluokka jolla esitetään ja lasketaan sijainteja laudalla
  * @author Markus
  */
 public class Sijainti {

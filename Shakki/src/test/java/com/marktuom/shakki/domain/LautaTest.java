@@ -6,8 +6,6 @@
 
 package com.marktuom.shakki.domain;
 
-import com.marktuom.shakki.domain.Lauta;
-import com.marktuom.shakki.domain.Ruutu;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -62,11 +60,11 @@ public class LautaTest {
     public void TestNappuloidenGenerointi(){
         l1.generoiNappulat();
         Ruutu[][] r1 = l1.getRuudukko();
-        assertEquals(new Sotilas(Vari.MUSTA).getClass(), r1[1][3].getNappula().getClass());
-        assertEquals(new Sotilas(Vari.MUSTA).getClass(), r1[6][7].getNappula().getClass());
-        assertEquals(new Torni(Vari.MUSTA).getClass(), r1[0][0].getNappula().getClass());
-        assertEquals(new Kuningas(Vari.MUSTA).getClass(), r1[7][4].getNappula().getClass());
-        assertEquals(new Ratsu(Vari.MUSTA).getClass(), r1[7][6].getNappula().getClass());
+        assertEquals(true, r1[1][3].getNappula() instanceof Sotilas);
+        assertEquals(true, r1[6][7].getNappula() instanceof Sotilas);
+        assertEquals(true, r1[0][0].getNappula() instanceof Torni);
+        assertEquals(true, r1[7][4].getNappula() instanceof Kuningas);
+        assertEquals(true, r1[7][6].getNappula() instanceof Ratsu);
     } 
     
     
@@ -74,9 +72,9 @@ public class LautaTest {
     public void TestNappuloitaTiella(){
         
         Ruutu[][] r1 = l1.getRuudukko();
-        r1[0][0].setNappula(new Kuningatar(Vari.MUSTA));
-        r1[0][1].setNappula(new Kuningatar(Vari.MUSTA));
-        r1[3][3].setNappula(new Kuningatar(Vari.MUSTA));
+        r1[0][0].setNappula(new Kuningatar(l1,  r1[0][0], Vari.MUSTA));
+        r1[0][1].setNappula(new Kuningatar(l1, r1[0][1], Vari.MUSTA));
+        r1[3][3].setNappula(new Kuningatar(l1, r1[3][3], Vari.MUSTA));
       
         assertEquals(false, l1.nappuloitaTiella(r1[0][0], r1[4][3]));
         
@@ -98,9 +96,9 @@ public class LautaTest {
     public void TestSiirra(){
         
         Ruutu[][] r1 = l1.getRuudukko();
-        r1[3][3].setNappula(new Kuningatar(Vari.MUSTA));
-        r1[4][4].setNappula(new Ratsu(Vari.MUSTA));
-        r1[5][2].setNappula(new Ratsu(Vari.VALKOINEN));
+        r1[3][3].setNappula(new Kuningatar(l1,r1[3][3], Vari.MUSTA));
+        r1[4][4].setNappula(new Ratsu(l1, r1[4][4], Vari.MUSTA));
+        r1[5][2].setNappula(new Ratsu(l1, r1[5][2],Vari.VALKOINEN));
       
         assertEquals(false, l1.siirra(r1[3][3], r1[7][7]));
         assertEquals(false, l1.siirra(r1[3][3], r1[5][6]));

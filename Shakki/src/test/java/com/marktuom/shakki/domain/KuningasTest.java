@@ -5,9 +5,6 @@
  */
 package com.marktuom.shakki.domain;
 
-import com.marktuom.shakki.domain.Kuningas;
-import com.marktuom.shakki.domain.Vari;
-import com.marktuom.shakki.domain.Sijainti;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,6 +22,7 @@ public class KuningasTest {
     public Kuningas k2;
     public Sijainti s1;
     public Sijainti s2;
+    Lauta l1;
 
     public KuningasTest() {
     }
@@ -39,9 +37,10 @@ public class KuningasTest {
 
     @Before
     public void setUp() {
-        k1 = new Kuningas(Vari.MUSTA);
-        k2 = new Kuningas(Vari.VALKOINEN);
-
+        l1 = new Lauta();
+        k1 = new Kuningas(l1, l1.getRuutu(2, 2), Vari.MUSTA);
+        k2 = new Kuningas(l1, l1.getRuutu(0, 0), Vari.VALKOINEN);
+      
     }
 
     @After
@@ -55,32 +54,27 @@ public class KuningasTest {
     // public void hello() {}
     @Test
     public void konstruktoriJaVari() {
+
         assertEquals(true, k1 != null);
         assertEquals(1, k1.getVari().getArvo());
         assertEquals(-1, k2.getVari().getArvo());
     }
 
     @Test
-    public void TestVoiLiikkua() {
-        s1 = new Sijainti(1, 1);
+    public void TestMahdollisetSiirrot(){
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                s2 = new Sijainti(i, j);
-                assertEquals(true, k1.voiLiikkua(s1, s2));
+                if (!(i == 1 && j == 1)) {
+                    assertEquals(true, k1.mahdollisetSiirrot().contains(l1.getRuutu(j+1, i+1)));
+                }
             }
-
         }
-        s2 = new Sijainti(10, 10);
-        assertEquals(false, k1.voiLiikkua(s1, s2));
-
-        s2 = new Sijainti(10, 0);
-        assertEquals(false, k1.voiLiikkua(s1, s2));
-
-        s2 = new Sijainti(0, 10);
-        assertEquals(false, k1.voiLiikkua(s1, s2));
-
-        s2 = new Sijainti(3, 1);
-        assertEquals(false, k1.voiLiikkua(s1, s2));
-
+        assertEquals(false, k1.mahdollisetSiirrot().contains(l1.getRuutu(2, 2)));
+    }
+    
+    @Test
+    public void TestLiiku() {
+        assertEquals(true, k1.liiku(l1.getRuutu(3, 3)));
+        assertEquals(true, l1.getRuutu(3, 3).getNappula() instanceof Kuningas);
     }
 }

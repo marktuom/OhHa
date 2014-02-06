@@ -2,7 +2,7 @@
 package com.marktuom.shakki.domain;
 
 /**
- *
+ * Kuvaa yhtä shakkilaudan ruutua. sisältää Sijainnin, nappulan sekä näihin liittyvät set ja get toiminnot.
  * @author Markus
  */
 public class Ruutu {

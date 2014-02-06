@@ -10,3 +10,8 @@ To 30.1 klo. 14:00 - ~21:00
 	Uusia testejä ja korjauksia vanhoihin testeihin
 	Uutta koodia lähinnä Lauta luokkaan
 	Paljon suunnittelua ja miettimistä
+6.2.2014 klo. 13:00-~21:00
+	Koko liikkumislogiikan uusiminen
+	uusia pelitilanteen tutkimiseen tehtyjä metodeja
+	Sekvenssikaaviot
+	Testien uusiminen vastaamaan uutta luokkajärjestelyä

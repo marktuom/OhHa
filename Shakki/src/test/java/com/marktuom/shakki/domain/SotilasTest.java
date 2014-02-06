@@ -5,9 +5,6 @@
  */
 package com.marktuom.shakki.domain;
 
-import com.marktuom.shakki.domain.Sotilas;
-import com.marktuom.shakki.domain.Vari;
-import com.marktuom.shakki.domain.Sijainti;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,8 +20,8 @@ public class SotilasTest {
 
     Sotilas sot1;
     Sotilas sot2;
-    Sijainti s1;
-    Sijainti s2;
+    Ruutu r1;
+    Lauta l1;
 
     public SotilasTest() {
     }
@@ -39,9 +36,11 @@ public class SotilasTest {
 
     @Before
     public void setUp() {
-        sot1 = new Sotilas(Vari.MUSTA);
-        sot2 = new Sotilas(Vari.VALKOINEN);
-        s1 = new Sijainti(2, 2);
+        l1 = new Lauta();
+        r1 = l1.getRuutu(2, 1);
+        sot1 = new Sotilas(l1, l1.getRuutu(2, 1), Vari.MUSTA);
+
+        sot2 = new Sotilas(l1, l1.getRuutu(2, 4), Vari.VALKOINEN);
 
     }
 
@@ -49,37 +48,36 @@ public class SotilasTest {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+
     @Test
     public void TestLiiku() {
         assertEquals(0, sot1.getSiirtoja());
-        sot1.liiku();
+        sot1.kasvataSiirtoja();
         assertEquals(1, sot1.getSiirtoja());
     }
 
     @Test
-    public void TestVoiLiikkua() {
-        s2 = new Sijainti(2, 3);
-        assertEquals(true, sot1.voiLiikkua(s1, s2));
-        assertEquals(false, sot2.voiLiikkua(s1, s2));
+    public void TestMahdollisetSiirrotLiiku1tai2() {
+        r1 = l1.getRuutu(2, 3);
+        assertEquals(true, sot1.mahdollisetSiirrot().contains(r1));
+        assertEquals(true, sot2.mahdollisetSiirrot().contains(r1));
 
-        s2 = new Sijainti(2, 1);
-        assertEquals(false, sot1.voiLiikkua(s1, s2));
-        assertEquals(true, sot2.voiLiikkua(s1, s2));
-
-        s2 = new Sijainti(2, 4);
-        assertEquals(true, sot1.voiLiikkua(s1, s2));
-        sot1.liiku();
-        assertEquals(false, sot1.voiLiikkua(s1, s2));
+        sot1.kasvataSiirtoja();
+        assertEquals(false, sot1.mahdollisetSiirrot().contains(r1));
         
-        s2 = new Sijainti(3, 3);
-        assertEquals(true, sot1.voiLiikkua(s1, s2));
+    }
+    
+    @Test
+    public void TestMahdollisetSiirrotSyo(){
         
-        s2 = new Sijainti(1, 1);
-        assertEquals(false, sot1.voiLiikkua(s1, s2));
+        
+        
+        Sotilas Syotava1 = new Sotilas(l1, l1.getRuutu(3, 3), Vari.MUSTA);
+        Sotilas Syotava2 = new Sotilas(l1, l1.getRuutu(1, 3), Vari.MUSTA);
+        
+        assertEquals(true, sot2.mahdollisetSiirrot().contains(l1.getRuutu(3, 3)));
+        assertEquals(true, sot2.mahdollisetSiirrot().contains(l1.getRuutu(1, 3)));
+        
+       
     }
 }

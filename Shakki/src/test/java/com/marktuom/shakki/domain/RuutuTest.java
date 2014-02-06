@@ -24,6 +24,7 @@ import static org.junit.Assert.*;
  */
 public class RuutuTest {
     
+    Lauta l1;
     Ruutu r1;
     Nappula n1;
     Sijainti s1;
@@ -41,9 +42,12 @@ public class RuutuTest {
     
     @Before
     public void setUp() {
-        n1 = new Sotilas(Vari.MUSTA);
+        l1 = new Lauta();
+        n1 = new Sotilas(l1, l1.getRuutu(5, 5), Vari.MUSTA);
         s1 = new Sijainti(1, 1);
         r1 = new Ruutu(s1, n1);
+        
+        
     }
     
     @After
@@ -64,7 +68,7 @@ public class RuutuTest {
     
     @Test
     public void TestiNappulanMuuttaminen(){
-        Nappula n2 = new Sotilas(Vari.MUSTA);
+        Nappula n2 = new Sotilas(l1, l1.getRuutu(7, 7), Vari.MUSTA);
         r1.setNappula(n2);
         assertEquals(n2, r1.getNappula());
         

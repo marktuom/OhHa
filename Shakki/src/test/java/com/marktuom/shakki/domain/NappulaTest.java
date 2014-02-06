@@ -6,7 +6,6 @@
 
 package com.marktuom.shakki.domain;
 
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,12 +17,13 @@ import static org.junit.Assert.*;
  *
  * @author Markus
  */
-public class TorniTest {
-    Lauta l1;
-    Torni t1;
-     Ruutu r1;
+public class NappulaTest {
     
-    public TorniTest() {
+    Lauta l1;
+    Ruutu r1;
+    Nappula n1;
+    
+    public NappulaTest() {
     }
     
     @BeforeClass
@@ -38,7 +38,7 @@ public class TorniTest {
     public void setUp() {
         l1 = new Lauta();
         r1 = l1.getRuutu(4, 4);
-        t1 = new Torni(l1, r1, Vari.MUSTA);
+        n1 = new Kuningatar(l1, r1, Vari.MUSTA);
     }
     
     @After
@@ -52,25 +52,14 @@ public class TorniTest {
     // public void hello() {}
     
     @Test
-    public void TestVoiliikkua(){
-        ArrayList<Ruutu> kohteet = new ArrayList<>();
-        kohteet.add(l1.getRuutu(4, 0));
-        kohteet.add(l1.getRuutu(0, 4));
-        kohteet.add(l1.getRuutu(4, 7));
-        kohteet.add(l1.getRuutu(7, 4));
-       
-       
-        assertEquals(true, t1.mahdollisetSiirrot().containsAll(kohteet));
+    public void TestLiiku(){
         
-        r1 = l1.getRuutu(4, 2);
-        Nappula n1 = new Sotilas(l1, r1, Vari.MUSTA);
-        r1 = l1.getRuutu(6, 2);
-        assertEquals(false, t1.mahdollisetSiirrot().contains(r1));
-        r1 = l1.getRuutu(4, 2);
-        assertEquals(false, t1.mahdollisetSiirrot().contains(r1));
-        n1 = new Sotilas(l1, r1, Vari.VALKOINEN);
-        assertEquals(true, t1.mahdollisetSiirrot().contains(r1));
+        r1 = l1.getRuutu(6, 6);
+        assertEquals(true, n1.liiku(r1));
+        assertEquals(null, l1.getRuutu(4, 4).getNappula());
         
-        
+        r1 = l1.getRuutu(6, 5);
+        assertEquals(true, n1.liiku(r1));
+        assertEquals(n1, r1.getNappula());
     }
 }

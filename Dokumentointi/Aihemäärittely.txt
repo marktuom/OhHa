@@ -1,8 +1,10 @@
 Aihe: Shakki
 Toteutetaan Shakki peli. 
-Pelin on tarkoitus toimia mahdollisimman tarkasti varsinaisen lautapelin sääntöjen mukaisesti. Mahdollisest lautapeliversioon nähden puuttuvat sekä tietokoneversiolle uniikit toiminnot tarkentuvat projektin edetessä.
+Pelin on tarkoitus toimia mahdollisimman tarkasti varsinaisen lautapelin sääntöjen mukaisesti. Nappuloiden siirrot noudattavat oikean shakin sääntöjä. Peli loppuu tasapeliin tai toisen pelaajan voittoon oikean pelin sääntöjen mukaisesti. Vaikka nappulaa yrittää siirtää epäonnistuneesti (esim. siirtää paikallaan) on silti mahdollista siirtä toista nappulaa samalla vuorolla.
 
-Käyttäjät: Pelin pelaajat
+Peliä pelataan graafisen käyttöliittymän kautta hiirellä. Nappuloiden siirtäminen tapahtuu raahaamalla haluttu nappula uuteen ruutuun.
+
+Käyttäjät: Pelin pelaajat (2 kpl.)
 
 Käyttäjien toiminnot:
 	pelin aloittaminen
