@@ -3,9 +3,9 @@ package com.marktuom.shakki.domain;
 import java.util.ArrayList;
 
 /**
- * Kuvaa shakkilautaa.
- * Sisältää pelitilanteen tutkimiseeen soveltuvia metodejä.
+ * Kuvaa shakkilautaa. Sisältää pelitilanteen tutkimiseeen soveltuvia metodejä.
  * Pitää listaa kaikista ruuduista
+ *
  * @author Markus
  */
 public class Lauta {
@@ -33,11 +33,11 @@ public class Lauta {
                 ruudukko[0][i].setNappula(new Lahetti(this, ruudukko[0][i], Vari.MUSTA));
                 ruudukko[7][i].setNappula(new Lahetti(this, ruudukko[7][i], Vari.VALKOINEN));
             } else if (i == 3) {
-                ruudukko[0][i].setNappula(new Kuningatar(this,  ruudukko[0][i], Vari.MUSTA));
+                ruudukko[0][i].setNappula(new Kuningatar(this, ruudukko[0][i], Vari.MUSTA));
                 ruudukko[7][i].setNappula(new Kuningatar(this, ruudukko[7][i], Vari.VALKOINEN));
             } else if (i == 4) {
-                ruudukko[0][i].setNappula(new Kuningas(this,ruudukko[0][i], Vari.MUSTA));
-                ruudukko[7][i].setNappula(new Kuningas(this,ruudukko[7][i], Vari.VALKOINEN));
+                ruudukko[0][i].setNappula(new Kuningas(this, ruudukko[0][i], Vari.MUSTA));
+                ruudukko[7][i].setNappula(new Kuningas(this, ruudukko[7][i], Vari.VALKOINEN));
             }
 
         }
@@ -64,25 +64,20 @@ public class Lauta {
         if (lahto == null || kohde == null) {
             return false;
         }
-        
+
         if (lahto.getNappula() == null) {
             return false;
         }
-        
-        Nappula siirrettava = lahto.getNappula();
-        Nappula poistettava = kohde.getNappula();    
-        
-        if(siirrettava.liiku(kohde)){
-            if(shakissa(siirrettava.getVari())){
-                lahto.setNappula(siirrettava);
-                kohde.setNappula(poistettava);
-                return false;
-            }
-            return true;
-        }
-        return false;
+
+        return lahto.getNappula().liiku(kohde);
     }
 
+    /**
+     * Tutkii onko halutun värisen pelaajan kuningas shakissa
+     * 
+     * @param pelaaja Pelaajan väri jonka kuninkaan shakki tilanne halutaan tarkistaa
+     * @return Palauttaa true mikäli kuningas on shakissa, muulloin false
+     */
     public boolean shakissa(Vari pelaaja) {
         Ruutu kuninkaanRuutu = null;
         ArrayList<Ruutu> siirrot = new ArrayList<>();
@@ -102,35 +97,37 @@ public class Lauta {
         }
         return siirrot.contains(kuninkaanRuutu);
     }
-    
-    public boolean matissa(Vari pelaaja){
-        if(!shakissa(pelaaja)){
+
+    /**
+     * Tutkii onko halutun värisen pelaajan kuningas matissa
+     * 
+     * @param pelaaja Pelaajan väri jonka kuninkaan matti tilanne halutaan tarkistaa
+     * @return 
+     */
+    public boolean matissa(Vari pelaaja) {
+        if (!shakissa(pelaaja)) {
             return false;
-        }     
+        }
+        ArrayList<Ruutu> laillisetSiirrot = new ArrayList<>();
         for (Ruutu[] rivi : ruudukko) {
             for (Ruutu ruutu : rivi) {
                 if (ruutu.getNappula() != null) {
                     if (ruutu.getNappula().getVari() == pelaaja) {
-                        for (Ruutu siirto : ruutu.getNappula().mahdollisetSiirrot()) {
-                            Nappula siirrettava = ruutu.getNappula();
-                            Nappula poistettava = siirto.getNappula();
-                            siirrettava.liiku(siirto);
-                            if(!shakissa(pelaaja)){
-                                siirrettava.setRuutu(ruutu);
-                                poistettava.setRuutu(siirto);
-                                return true;
-                            }
-                            siirrettava.setRuutu(ruutu);
-                            poistettava.setRuutu(siirto);
-                        }
+                        laillisetSiirrot.addAll(ruutu.getNappula().laillisetSiirrot());
                     }
                 }
             }
         }
-     
-        return true;
+
+        return laillisetSiirrot.isEmpty();
     }
 
+    /**
+     * Tutkii onko kahden samalla linjalla olevien ruutujen välillä nappuloita
+     * @param lahto Tutkittavan välin alku
+     * @param kohde Tutkittavan välin loppu
+     * @return Mikäli ruudut eivät ole linjassa tai niiden välillä ei ole nappuloita palautetaan false. Mikäli väliltä löytyy yksikin nappula palautetaan true;
+     */
     public boolean nappuloitaTiella(Ruutu lahto, Ruutu kohde) {
         Sijainti alku = lahto.getSijainti();
         Sijainti maali = kohde.getSijainti();

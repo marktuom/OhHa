@@ -45,11 +45,6 @@ public class NappulaTest {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
     
     @Test
     public void TestLiiku(){
@@ -61,5 +56,17 @@ public class NappulaTest {
         r1 = l1.getRuutu(6, 5);
         assertEquals(true, n1.liiku(r1));
         assertEquals(n1, r1.getNappula());
+    }
+    
+    @Test
+    public void TestLaillisetSiirrot(){
+        Nappula n2 = new Kuningas(l1, l1.getRuutu(0, 3), Vari.VALKOINEN);
+        assertEquals(true, n2.mahdollisetSiirrot().contains(l1.getRuutu(0, 4)));
+        assertEquals(false, n2.laillisetSiirrot().contains(l1.getRuutu(0, 4)));
+        
+        Nappula n3 = new Kuningas(l1, l1.getRuutu(4, 7), Vari.MUSTA);
+        Nappula n4 = new Torni(l1, l1.getRuutu(4, 0), Vari.VALKOINEN);
+        assertEquals(true, n1.mahdollisetSiirrot().contains(l1.getRuutu(5, 4)));
+        assertEquals(false, n1.laillisetSiirrot().contains(l1.getRuutu(5, 4)));
     }
 }
