@@ -10,8 +10,21 @@ import java.util.ArrayList;
  */
 public class Lauta {
 
+    /**
+     * Taulukko ruutuja jotka muodostavat 8x8 pelilaudan
+     */
     private final Ruutu[][] ruudukko;
-
+    
+    /**
+     * Vari joka kertoo kumman värisen nappulan siirtymävuoro on
+     */
+    private Vari vuorossa;
+    
+    
+    /**
+     * Luodaan uusi lauta ja siihen liittyvä ruudukko
+     * Lisäksi asetetaan valkoinen pelaaja siirtymisvuoroon
+     */
     public Lauta() {
         ruudukko = new Ruutu[8][8];
         for (int i = 0; i < 8; i++) {
@@ -19,8 +32,16 @@ public class Lauta {
                 ruudukko[i][j] = new Ruutu(new Sijainti(j, i));
             }
         }
+        this.vuorossa = Vari.VALKOINEN;
     }
 
+    public Vari getVuorossa() {
+        return vuorossa;
+    }
+    
+/**
+ * Luodaan ja asetetaan shakin nappulat niiden asianmukaisille aloituspaikoille ruudukossa
+ */
     public void generoiNappulat() {
         for (int i = 0; i < 8; i++) {
             if (i == 0 || i == 7) {
@@ -60,6 +81,14 @@ public class Lauta {
 
     }
 
+    
+    /**
+     * Siirtää laudalla olevan pelinappulan mikäli siirto on sääntöjen mukainen ja vaihtaa vuoron toiselle pelaajalle.
+     * 
+     * @param lahto Ruutu jossa olevaa nappulaa halutaan siirtää
+     * @param kohde Ruutu johon lahtoruudusssa oleva nappula halutaan siirtää
+     * @return Mikäli lahto sisältää nappulan ja se siirtyy ruutuun kohde palautetaan true. Muulloin palautetaan false;
+     */
     public boolean siirra(Ruutu lahto, Ruutu kohde) {
         if (lahto == null || kohde == null) {
             return false;
@@ -68,8 +97,21 @@ public class Lauta {
         if (lahto.getNappula() == null) {
             return false;
         }
+        
+        if(lahto.getNappula().getVari() != vuorossa){
+            return false;
+        }
+        
+        if(lahto.getNappula().liiku(kohde)){
+            if(vuorossa == Vari.VALKOINEN){
+                vuorossa = Vari.MUSTA;
+            } else {
+                vuorossa = Vari.VALKOINEN;
+            }
+            return true;
+        }
 
-        return lahto.getNappula().liiku(kohde);
+        return false;
     }
 
     /**

@@ -96,7 +96,16 @@ public abstract class Nappula {
         return siirrot;
     }
 
+    /**
+     * 
+     * @param xMuutos 1, 0 tai -1 sen mukaan mihin suuntaan siirrot halutaan tutkia x-akselin suhteen
+     * @param Ymuutos 1, 0 tai -1 sen mukaan mihin suuntaan siirrot halutaan tutkia y-akselin suhteen
+     * @return 
+     */
     protected Collection<Ruutu> mahdollisetSiirrotSuuntaan(int xMuutos, int Ymuutos) {
+        if(Math.abs(xMuutos) > 1 || Math.abs(Ymuutos) > 1){
+            return null;
+        }
         ArrayList<Ruutu> siirrot = new ArrayList<>();
         for (int i = 1; i < 8; i++) {
             Ruutu mahdollinenKohde = lauta.getRuutu(this.ruutu.getSijainti().getX() + (i*xMuutos), this.ruutu.getSijainti().getY() + (i*Ymuutos));

@@ -92,9 +92,9 @@ public class LautaTest {
         r1[5][2].setNappula(new Ratsu(l1, r1[5][2], Vari.VALKOINEN));
 
         assertEquals(false, l1.siirra(r1[3][3], r1[7][7]));
-        assertEquals(false, l1.siirra(r1[3][3], r1[5][6]));
-        assertEquals(false, l1.siirra(r1[3][3], r1[4][4]));
+        assertEquals(false, l1.siirra(r1[3][3], r1[1][1]));
         assertEquals(true, l1.siirra(r1[5][2], r1[4][4]));
+        assertEquals(false, l1.siirra(r1[4][4], r1[5][6]));
         assertEquals(true, l1.siirra(r1[3][3], r1[4][4]));
         assertEquals(true, r1[4][4].getNappula() instanceof Kuningatar);
     }
