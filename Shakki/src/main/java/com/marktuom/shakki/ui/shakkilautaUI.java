@@ -7,19 +7,19 @@ import javax.swing.*;
 import com.marktuom.shakki.domain.*;
 
 /**
- * Piirtää shakkilaudan ruudukon ja nappulat. Toimii lisäksi mouselistenerinä ja
+ * Luo shakkilaudan ruudukon ja nappulat. Toimii lisäksi mouselistenerinä ja
  * välittää siirrot logiikalle.
  *
  * @author Markus
  */
 public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionListener {
 
-    JLayeredPane layeredPane;
-    JPanel shakkilauta;
-    JLabel shakkinappula;
-    Lauta lauta;
-    Ruutu lahto;
-    Ruutu kohde;
+    private JLayeredPane layeredPane;
+    private JPanel shakkilauta;
+    private JLabel shakkinappula;
+    private Lauta lauta;
+    private Ruutu lahto;
+    
 
     public shakkilautaUI(Lauta lauta) {
         this.lauta = lauta;
@@ -45,23 +45,24 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
 
             int rivi = (i / 8) % 2;
             if (rivi == 0) {
-                ruutu.setBackground(i % 2 == 0 ? Color.blue : Color.white);
+                ruutu.setBackground(i % 2 == 0 ? Color.black : Color.white);
             } else {
-                ruutu.setBackground(i % 2 == 0 ? Color.white : Color.blue);
+                ruutu.setBackground(i % 2 == 0 ? Color.white : Color.black);
             }
+            
+            //Nappuloiden lisääminen laudalle JLabelien kuvina tulee tähän
+       
+            this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            this.pack();
+            this.setResizable(false);
+            this.setTitle("Shakki");
+            this.setVisible(true);
         }
-        
-        
-        
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
-        this.setResizable(false);
-        this.pack();
-        this.setVisible(true);
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
