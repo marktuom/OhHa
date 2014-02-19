@@ -121,14 +121,10 @@ public class Lauta {
      * @return Palauttaa true mikäli kuningas on shakissa, muulloin false
      */
     public boolean shakissa(Vari pelaaja) {
-        Ruutu kuninkaanRuutu = null;
         ArrayList<Ruutu> siirrot = new ArrayList<>();
         for (Ruutu[] rivi : ruudukko) {
             for (Ruutu ruutu : rivi) {
                 if (ruutu.getNappula() != null) {
-                    if (ruutu.getNappula() instanceof Kuningas && ruutu.getNappula().getVari() == pelaaja) {
-                        kuninkaanRuutu = ruutu;
-                    }
                     if (ruutu.getNappula().getVari() != pelaaja) {
                         for (Ruutu siirto : ruutu.getNappula().mahdollisetSiirrot()) {
                             siirrot.add(siirto);
@@ -137,7 +133,27 @@ public class Lauta {
                 }
             }
         }
-        return siirrot.contains(kuninkaanRuutu);
+        return siirrot.contains(kuninkaanRuutu(pelaaja));
+    }
+   
+    
+    /**
+     * Etsii ja palauttaa halutun pelaajan kuninkaan sisältävän ruudun
+     * 
+     * @param pelaaja   Pelaaja jonka kuningas halutaan etsiä
+     * @return Ruutu jossa parametrina saadun pelaajan kuningas sijaitsee. Jos kuningasta ei löydy palautetaan null
+     */
+    public Ruutu kuninkaanRuutu(Vari pelaaja){
+        for (Ruutu[] rivi : ruudukko) {
+            for (Ruutu ruutu : rivi) {
+                if (ruutu.getNappula() != null) {
+                    if (ruutu.getNappula() instanceof Kuningas && ruutu.getNappula().getVari() == pelaaja) {
+                        return ruutu;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**

@@ -1,4 +1,3 @@
-
 package com.marktuom.shakki.domain;
 
 import java.util.ArrayList;
@@ -6,31 +5,35 @@ import java.util.Collection;
 
 /**
  * Nappulan aliluokka joka kuvaa shakin sotilasta
+ *
  * @author Markus
  */
-public class Sotilas extends Nappula{
-    
-    private int siirtoja;
+public class Sotilas extends Nappula {
 
     public Sotilas(Lauta lauta, Ruutu ruutu, Vari vari) {
         super(lauta, ruutu, vari);
-        this.siirtoja = 0;
     }
-    
-    public void kasvataSiirtoja(){
+
+    public void kasvataSiirtoja() {
         siirtoja++;
     }
 
-    public int getSiirtoja() {
-        return siirtoja;
-    }
-    
-    
     @Override
     public boolean liiku(Ruutu kohde) {
+        Ruutu ohestalyotava = null;
+        if (this.ruutu.getSijainti().xMuutos(kohde.getSijainti()) != 0 && kohde.getNappula() == null) {
+            ohestalyotava = lauta.getRuutu(kohde.getSijainti().getX(), this.ruutu.getSijainti().getY());
+        }
         boolean liikkui = super.liiku(kohde);
-        if(liikkui){
-            siirtoja++;
+        if (liikkui) {
+            if ((this.ruutu.getSijainti().getY() == 0 && this.getVari() == Vari.VALKOINEN) || (this.ruutu.getSijainti().getY() == 7 && this.getVari() == Vari.MUSTA)) {
+                Nappula ylennys = new Kuningatar(lauta, ruutu, this.getVari());
+                ylennys.setRuutu(this.ruutu);
+                this.ruutu.setNappula(ylennys);
+            }
+            if (ohestalyotava != null) {
+                ohestalyotava.poistaNappula();
+            }
         }
         return liikkui;
     }
@@ -39,26 +42,46 @@ public class Sotilas extends Nappula{
     public Collection<Ruutu> mahdollisetSiirrot() {
         Sijainti omaSijainti = this.ruutu.getSijainti();
         ArrayList<Ruutu> mahdollisetKohteet = new ArrayList<>();
-        
+
+        //Siirto 1 eteen
         Ruutu mahdollinenKohde = lauta.getRuutu(omaSijainti.getX(), omaSijainti.getY() + this.getVari().getArvo());
-        if(mahdollinenKohde != null && mahdollinenKohde.getNappula() == null){
+        if (mahdollinenKohde != null && mahdollinenKohde.getNappula() == null) {
             mahdollisetKohteet.add(mahdollinenKohde);
         }
-        
-        mahdollinenKohde = lauta.getRuutu(omaSijainti.getX(), omaSijainti.getY() + (this.getVari().getArvo()*2));
-        if(this.siirtoja == 0 && mahdollinenKohde.getNappula() == null && !lauta.nappuloitaTiella(this.ruutu, mahdollinenKohde)){
+
+        //siirto 2 eteen
+        mahdollinenKohde = lauta.getRuutu(omaSijainti.getX(), omaSijainti.getY() + (this.getVari().getArvo() * 2));
+        if (this.siirtoja == 0 && mahdollinenKohde.getNappula() == null && !lauta.nappuloitaTiella(this.ruutu, mahdollinenKohde)) {
             mahdollisetKohteet.add(mahdollinenKohde);
         }
-        
-         mahdollinenKohde = lauta.getRuutu(omaSijainti.getX() + 1, omaSijainti.getY() + this.getVari().getArvo());
-        if(mahdollinenKohde != null && (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() != this.getVari())){
+
+        //oikea eteenpäin
+        mahdollinenKohde = lauta.getRuutu(omaSijainti.getX() + 1, omaSijainti.getY() + this.getVari().getArvo());
+        if (mahdollinenKohde != null && (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() != this.getVari())) {
             mahdollisetKohteet.add(mahdollinenKohde);
         }
-          mahdollinenKohde = lauta.getRuutu(omaSijainti.getX() - 1, omaSijainti.getY() + this.getVari().getArvo());
-        if(mahdollinenKohde != null && (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() != this.getVari())){
+        //Oikea eteenpäin ohestalyönti
+        Ruutu ohestalyotava = lauta.getRuutu(omaSijainti.getX() + 1, omaSijainti.getY());
+        if (ohestalyotava != null) {
+            if (ohestalyotava.getNappula() instanceof Sotilas && ohestalyotava.getNappula().getVari() != this.getVari() && ohestalyotava.getNappula().siirtoja == 1) {
+                mahdollisetKohteet.add(mahdollinenKohde);
+            }
+        }
+
+        //Vasen eteenpäin
+        mahdollinenKohde = lauta.getRuutu(omaSijainti.getX() - 1, omaSijainti.getY() + this.getVari().getArvo());
+        if (mahdollinenKohde != null && (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() != this.getVari())) {
             mahdollisetKohteet.add(mahdollinenKohde);
         }
+        //Vasen eteenpäin ohestalyönti
+        ohestalyotava = lauta.getRuutu(omaSijainti.getX() - 1, omaSijainti.getY());
+        if (ohestalyotava != null) {
+            if (ohestalyotava.getNappula() instanceof Sotilas && ohestalyotava.getNappula().getVari() != this.getVari() && ohestalyotava.getNappula().siirtoja == 1) {
+                mahdollisetKohteet.add(mahdollinenKohde);
+            }
+        }
+
         return mahdollisetKohteet;
     }
-    
+
 }

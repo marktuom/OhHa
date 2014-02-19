@@ -62,20 +62,20 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
     @Override
     public void mousePressed(MouseEvent e) {
         shakkinappula = null;
-        Component siirronLahto = shakkilauta.findComponentAt(e.getX(), e.getY());
-        if (siirronLahto instanceof JPanel) {
+        Component mahdollinenNappula = shakkilauta.findComponentAt(e.getX(), e.getY());
+        if (mahdollinenNappula instanceof JPanel) {
             return;
         }
-        
-        lahto = lauta.getRuutu(e.getX() / 80, e.getY() / 80);       
+
+        lahto = lauta.getRuutu(e.getX() / 80, e.getY() / 80);
         if (lahto.getNappula().getVari() == lauta.getVuorossa()) {
-            korostaRuudut(lahto.getNappula().laillisetSiirrot(), Color.green);
+            korostaRuutu(lahto.getNappula().laillisetSiirrot(), Color.green);
         }
-        
-        Point lahtoSijainti = siirronLahto.getParent().getLocation();
+
+        Point lahtoSijainti = mahdollinenNappula.getParent().getLocation();
         xKorjaus = lahtoSijainti.x - e.getX();
         yKorjaus = lahtoSijainti.y - e.getY();
-        shakkinappula = (JLabel) siirronLahto;
+        shakkinappula = (JLabel) mahdollinenNappula;
         shakkinappula.setLocation(e.getX() + xKorjaus, e.getY() + yKorjaus);
         shakkinappula.setSize(shakkinappula.getWidth(), shakkinappula.getHeight());
         layeredPane.add(shakkinappula, JLayeredPane.DRAG_LAYER);
@@ -86,21 +86,14 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
         if (shakkinappula == null) {
             return;
         }
-
+        
+        //Siirron tekeminen
         shakkinappula.setVisible(false);
         Component siirronKohde;
         Ruutu maali = lauta.getRuutu(e.getX() / 80, e.getY() / 80);
         boolean voiliikkua = lauta.siirra(lahto, maali);
         if (voiliikkua) {
-            siirronKohde = shakkilauta.findComponentAt(e.getX(), e.getY());
-            if (siirronKohde instanceof JLabel) {
-                Container parent = siirronKohde.getParent();
-                parent.remove(0);
-                parent.add(shakkinappula);
-            } else {
-                Container parent = (Container) siirronKohde;
-                parent.add(shakkinappula);
-            }
+            piirraNappulat();
         } else {
             siirronKohde = shakkilauta.getComponent(lahto.getSijainti().getY() * 8 + lahto.getSijainti().getX());
             Container parent = (Container) siirronKohde;
@@ -109,6 +102,19 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
         lahto = null;
         varitaRuudukko();
         shakkinappula.setVisible(true);
+        
+        
+        if(lauta.shakissa(lauta.getVuorossa())){
+            korostaRuutu(lauta.kuninkaanRuutu(lauta.getVuorossa()), Color.red);
+        }
+        if(lauta.matissa(lauta.getVuorossa())){
+            System.out.println("PELI OHI");
+            if(lauta.getVuorossa() == Vari.VALKOINEN){
+                System.out.println("MUSTA VOITTI");
+            } else{
+                System.out.println("VALKOINEN VOITTI");
+            }
+        }
     }
 
     @Override
@@ -135,9 +141,9 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
     public void mouseClicked(MouseEvent e) {
     }
 
-    
     /**
-     * Värittää ruudukon shakille tyypillisellä ruutukuviolla. Vasen yläkulma on "valkoinen" ruutu.
+     * Värittää ruudukon shakille tyypillisellä ruutukuviolla. Vasen yläkulma on
+     * "valkoinen" ruutu.
      */
     public void varitaRuudukko() {
         for (int i = 0; i < 64; i++) {
@@ -153,18 +159,20 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
     }
 
     /**
-     * Piirtää laudan nappulasijoittelua vastaavat nappulat laudalle
+     * Piirtää laudan nappulasijoittelua vastaavat nappulat laudalle. Mikäli laudalla on vanha asetelma, se tuhotaan.
      */
     public void piirraNappulat() {
 
-        JPanel panel;
         Ruutu[][] ruudukko = lauta.getRuudukko();
         Nappula piirrettavaNappula;
-
+        JPanel panel;
         for (int i = 0; i < 64; i++) {
+            panel = (JPanel) shakkilauta.getComponent(i);
+            if (panel.getComponentCount() != 0) {
+                panel.remove(0);
+            }
             piirrettavaNappula = ruudukko[i / 8][i % 8].getNappula();
             if (piirrettavaNappula != null) {
-                panel = (JPanel) shakkilauta.getComponent(i);
                 luoNappula(piirrettavaNappula);
                 panel.add(shakkinappula);
             }
@@ -172,26 +180,13 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
     }
 
     /**
-     * Asettaa shakkinappula muuttujan arvoksi parametrin ruudussa olevaa
-     * nappulaa vastaavaksi JLabeliksi
+     * Asettaa "shakkinappula" muuttujan arvoksi parametrin ruudussa olevaa
+     * nappulaa vastaavaksi JLabelin
      *
      * @param nappula nappula joka halutaan piirtää.
      */
     public void luoNappula(Nappula nappula) {
-                //Nappuloiden lisääminen laudalle JLabelien otsikoina
-//                        "\u2654"    white king
-//                        "\u2655"    white queen
-//                        "\u2656"    white rook
-//                        "\u2657"    white bishop
-//                        "\u2658"    white knight
-//                        "\u2659"    white pawn
-//        
-//                        "\u265A"    black king
-//                        "\u265B"    black queen
-//                        "\u265C"    black rook
-//                        "\u265D"    black bishop
-//                        "\u265E"    black knight
-//                        "\u265F"    black pawn
+
         char merkki;
         if (nappula.getVari() == Vari.VALKOINEN) {
             merkki = '\u2654';
@@ -213,14 +208,26 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
         shakkinappula = new JLabel("" + merkki, SwingConstants.CENTER);
         shakkinappula.setFont(new Font(null, Font.PLAIN, 62));
     }
-    
-    public void korostaRuudut(Collection<Ruutu> ruudut, Color vari){
+
+    /**
+     * Muuttaa kaikkien parametrina saatujen ruutujen tastavärit
+     * @param ruudut    Collection ruutja joiden taustaväri halutaan muuttaa
+     * @param vari Haluttu taustaväri
+     */
+    public void korostaRuutu(Collection<Ruutu> ruudut, Color vari) {
         for (Ruutu ruutu : ruudut) {
-            korostaRuudut(ruutu, vari);
+            korostaRuutu(ruutu, vari);
         }
     }
 
-    public void korostaRuudut(Ruutu ruutu, Color vari){
+    
+    /**
+     * Muuttaa ruudun taustavärin
+     *  
+     * @param ruutu Ruutu jonka taustaväri halutaan muuttaa
+     * @param vari Haluttu taustaväri
+     */
+    public void korostaRuutu(Ruutu ruutu, Color vari) {
         JPanel PiirrettavaRuutu = (JPanel) shakkilauta.getComponent(ruutu.getSijainti().getY() * 8 + ruutu.getSijainti().getX());
         PiirrettavaRuutu.setBackground(vari);
     }

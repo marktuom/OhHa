@@ -13,17 +13,13 @@ public class Kuningas extends Nappula {
         super(lauta, ruutu, vari);
     }
 
-    /**
-     *{@inheritDoc}
-     */
+
     @Override
     public boolean liiku(Ruutu kohde) {   
         return super.liiku(kohde);
     }
 
-    /**
-     *{@inheritDoc}
-     */
+  
     @Override
     public Collection<Ruutu> mahdollisetSiirrot() {
         ArrayList<Ruutu> mahdollisetKohteet = new ArrayList<>();

@@ -5,7 +5,7 @@ import java.util.Collection;
 
 /**
  * Shakkinappuloiden yliluokka. Määrittää kaikille nappuloille yhteiset
- * liikkumiseen liittyvät toiminnot sekä nappuloille yhteiset muuttujat.
+ * liikkumiseen liittyvät toiminnot sekä useille nappuloille yhteiset muuttujat.
  *
  * @author Markus
  *
@@ -15,9 +15,18 @@ public abstract class Nappula {
     private final Vari vari;
     protected final Lauta lauta;
     protected Ruutu ruutu;
+    
+    /**
+     * Sotilas, Torni ja Kuningas tarvitsevat tätä erikoissiirtojensa ehdoissa
+     */
+    protected int siirtoja;
 
     public void setRuutu(Ruutu ruutu) {
         this.ruutu = ruutu;
+    }
+
+    public int getSiirtoja() {
+        return siirtoja;
     }
 
     /**
@@ -30,6 +39,7 @@ public abstract class Nappula {
         this.vari = vari;
         this.lauta = lauta;
         this.ruutu = ruutu;
+        this.siirtoja = 0;
         if (this.ruutu != null) {
             this.ruutu.setNappula(this);
         }
@@ -46,7 +56,7 @@ public abstract class Nappula {
         if (!this.laillisetSiirrot().contains(kohde)) {
             return false;
         }
-
+        this.siirtoja++;
         this.ruutu.poistaNappula();
         this.ruutu = kohde;
         this.ruutu.setNappula(this);
@@ -58,7 +68,7 @@ public abstract class Nappula {
      * perusteella
      *
      * @return Palauttaa Collectionin ruuduista joihin nappulan on mahdollista
-     * siirtyä
+     * siirtyä omien sääntöjensä mukaan
      *
      */
     public abstract Collection<Ruutu> mahdollisetSiirrot();
@@ -97,7 +107,7 @@ public abstract class Nappula {
     }
 
     /**
-     * 
+     * Palauttaa listan vapaista ruuduista määrätyllä linjalla
      * @param xMuutos 1, 0 tai -1 sen mukaan mihin suuntaan siirrot halutaan tutkia x-akselin suhteen
      * @param Ymuutos 1, 0 tai -1 sen mukaan mihin suuntaan siirrot halutaan tutkia y-akselin suhteen
      * @return 
