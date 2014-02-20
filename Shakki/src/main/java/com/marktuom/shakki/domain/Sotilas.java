@@ -10,8 +10,11 @@ import java.util.Collection;
  */
 public class Sotilas extends Nappula {
 
+    private int ohestalyotavaVuorolla;
+
     public Sotilas(Lauta lauta, Ruutu ruutu, Vari vari) {
         super(lauta, ruutu, vari);
+        this.ohestalyotavaVuorolla = -1;
     }
 
     public void kasvataSiirtoja() {
@@ -24,6 +27,10 @@ public class Sotilas extends Nappula {
         if (this.ruutu.getSijainti().xMuutos(kohde.getSijainti()) != 0 && kohde.getNappula() == null) {
             ohestalyotava = lauta.getRuutu(kohde.getSijainti().getX(), this.ruutu.getSijainti().getY());
         }
+        int vuoro = -1;
+        if (kohde.getSijainti().yMuutos(this.ruutu.getSijainti()) == 2) {
+            vuoro = lauta.getVuoro() + 1;
+        }
         boolean liikkui = super.liiku(kohde);
         if (liikkui) {
             if ((this.ruutu.getSijainti().getY() == 0 && this.getVari() == Vari.VALKOINEN) || (this.ruutu.getSijainti().getY() == 7 && this.getVari() == Vari.MUSTA)) {
@@ -34,6 +41,7 @@ public class Sotilas extends Nappula {
             if (ohestalyotava != null) {
                 ohestalyotava.poistaNappula();
             }
+            ohestalyotavaVuorolla = vuoro;
         }
         return liikkui;
     }
@@ -64,7 +72,9 @@ public class Sotilas extends Nappula {
         Ruutu ohestalyotava = lauta.getRuutu(omaSijainti.getX() + 1, omaSijainti.getY());
         if (ohestalyotava != null) {
             if (ohestalyotava.getNappula() instanceof Sotilas && ohestalyotava.getNappula().getVari() != this.getVari() && ohestalyotava.getNappula().siirtoja == 1) {
-                mahdollisetKohteet.add(mahdollinenKohde);
+                if (lauta.getVuoro() == ((Sotilas) ohestalyotava.getNappula()).getOhestalyotavaVuorolla()) {
+                    mahdollisetKohteet.add(mahdollinenKohde);
+                }
             }
         }
 
@@ -77,11 +87,17 @@ public class Sotilas extends Nappula {
         ohestalyotava = lauta.getRuutu(omaSijainti.getX() - 1, omaSijainti.getY());
         if (ohestalyotava != null) {
             if (ohestalyotava.getNappula() instanceof Sotilas && ohestalyotava.getNappula().getVari() != this.getVari() && ohestalyotava.getNappula().siirtoja == 1) {
-                mahdollisetKohteet.add(mahdollinenKohde);
+                if (lauta.getVuoro() == ((Sotilas) ohestalyotava.getNappula()).getOhestalyotavaVuorolla()) {
+                    mahdollisetKohteet.add(mahdollinenKohde);
+                }
             }
         }
 
         return mahdollisetKohteet;
+    }
+
+    public int getOhestalyotavaVuorolla() {
+        return ohestalyotavaVuorolla;
     }
 
 }

@@ -20,6 +20,8 @@ public class Lauta {
      */
     private Vari vuorossa;
     
+    private int vuoro;
+    
     
     /**
      * Luodaan uusi lauta ja siihen liittyvä ruudukko
@@ -33,6 +35,7 @@ public class Lauta {
             }
         }
         this.vuorossa = Vari.VALKOINEN;
+        this.vuoro = 1;
     }
 
     public Vari getVuorossa() {
@@ -81,6 +84,10 @@ public class Lauta {
 
     }
 
+    public int getVuoro() {
+        return vuoro;
+    }
+    
     
     /**
      * Siirtää laudalla olevan pelinappulan mikäli siirto on sääntöjen mukainen ja vaihtaa vuoron toiselle pelaajalle.
@@ -103,6 +110,7 @@ public class Lauta {
         }
         
         if(lahto.getNappula().liiku(kohde)){
+            vuoro++;
             if(vuorossa == Vari.VALKOINEN){
                 vuorossa = Vari.MUSTA;
             } else {
