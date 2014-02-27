@@ -24,18 +24,19 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
     int xKorjaus;
     int yKorjaus;
 
-    public shakkilautaUI(Lauta lauta) {
-        this.lauta = lauta;
-        lauta.generoiNappulat();
+    JFrame voittoikkuna;
 
-        Dimension laudanKoko = new Dimension(640, 640);
-
+    public shakkilautaUI(Lauta lauta, int koko) {
+        
+        Dimension laudanKoko = new Dimension(koko, koko);
+        
         layeredPane = new JLayeredPane();
         getContentPane().add(layeredPane);
         layeredPane.setPreferredSize(laudanKoko);
+        
         layeredPane.addMouseListener(this);
         layeredPane.addMouseMotionListener(this);
-
+        
         shakkilauta = new JPanel();
         layeredPane.add(shakkilauta, JLayeredPane.DEFAULT_LAYER);
         shakkilauta.setLayout(new GridLayout(8, 8));
@@ -44,26 +45,32 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
 
         for (int i = 0; i < 64; i++) {
             JPanel ruutu = new JPanel(new BorderLayout());
+            ruutu.setBorder(BorderFactory.createLineBorder(Color.black, 1));
             shakkilauta.add(ruutu);
 
         }
-        varitaRuudukko();
 
-        piirraNappulat();
+        uusiPeli();
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.pack();
-        this.setResizable(true);
         this.setTitle("Shakki");
+        int kehyksenkorkeus = getHeight() - getContentPane().getHeight() - 13;
+        int kehyksenleveys = getWidth() - getContentPane().getWidth() - 13;
+        this.setSize(koko + kehyksenleveys, koko + kehyksenkorkeus);
         this.setVisible(true);
-
+        this.setResizable(false);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if(voittoikkuna != null){
+            return;
+        }
+        
         shakkinappula = null;
         Component mahdollinenNappula = shakkilauta.findComponentAt(e.getX(), e.getY());
-        if (mahdollinenNappula instanceof JPanel) {
+        if (mahdollinenNappula instanceof JPanel || mahdollinenNappula == null) {
             return;
         }
 
@@ -81,12 +88,16 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
         layeredPane.add(shakkinappula, JLayeredPane.DRAG_LAYER);
     }
 
+    public shakkilautaUI(Lauta lauta) {
+        this(lauta, 640);
+    }
+
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (shakkinappula == null) {
+        if (shakkinappula == null || voittoikkuna != null) {
             return;
         }
-        
+
         //Siirron tekeminen
         shakkinappula.setVisible(false);
         Component siirronKohde;
@@ -102,17 +113,15 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
         lahto = null;
         varitaRuudukko();
         shakkinappula.setVisible(true);
-        
-        
-        if(lauta.shakissa(lauta.getVuorossa())){
+
+        if (lauta.shakissa(lauta.getVuorossa())) {
             korostaRuutu(lauta.kuninkaanRuutu(lauta.getVuorossa()), Color.red);
         }
-        if(lauta.matissa(lauta.getVuorossa())){
-            System.out.println("PELI OHI");
-            if(lauta.getVuorossa() == Vari.VALKOINEN){
-                System.out.println("MUSTA VOITTI");
-            } else{
-                System.out.println("VALKOINEN VOITTI");
+        if (lauta.matissa(lauta.getVuorossa())) {
+            if (lauta.getVuorossa() == Vari.VALKOINEN) {
+                voittoikkuna = new PeliOhiIkkunaUI("musta voitti!", this);
+            } else {
+                voittoikkuna = new PeliOhiIkkunaUI("valkoinen voitti!", this);
             }
         }
     }
@@ -151,15 +160,16 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
 
             int rivi = (i / 8) % 2;
             if (rivi == 1) {
-                ruutu.setBackground(i % 2 == 0 ? Color.black : Color.white);
+                ruutu.setBackground(i % 2 == 0 ? Color.GRAY : Color.white);
             } else {
-                ruutu.setBackground(i % 2 == 0 ? Color.white : Color.black);
+                ruutu.setBackground(i % 2 == 0 ? Color.white : Color.GRAY);
             }
         }
     }
 
     /**
-     * Piirtää laudan nappulasijoittelua vastaavat nappulat laudalle. Mikäli laudalla on vanha asetelma, se tuhotaan.
+     * Piirtää laudan nappulasijoittelua vastaavat nappulat laudalle. Mikäli
+     * laudalla on vanha asetelma, se tuhotaan.
      */
     public void piirraNappulat() {
 
@@ -181,7 +191,7 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
 
     /**
      * Asettaa "shakkinappula" muuttujan arvoksi parametrin ruudussa olevaa
-     * nappulaa vastaavaksi JLabelin
+     * nappulaa vastaavan JLabelin
      *
      * @param nappula nappula joka halutaan piirtää.
      */
@@ -210,8 +220,9 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
     }
 
     /**
-     * Muuttaa kaikkien parametrina saatujen ruutujen tastavärit
-     * @param ruudut    Collection ruutja joiden taustaväri halutaan muuttaa
+     * Muuttaa parametrina saadun Collectionin ruutujen tastavärit
+     *
+     * @param ruudut Collection ruutja joiden taustaväri halutaan muuttaa
      * @param vari Haluttu taustaväri
      */
     public void korostaRuutu(Collection<Ruutu> ruudut, Color vari) {
@@ -220,10 +231,9 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
         }
     }
 
-    
     /**
      * Muuttaa ruudun taustavärin
-     *  
+     *
      * @param ruutu Ruutu jonka taustaväri halutaan muuttaa
      * @param vari Haluttu taustaväri
      */
@@ -231,4 +241,16 @@ public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionL
         JPanel PiirrettavaRuutu = (JPanel) shakkilauta.getComponent(ruutu.getSijainti().getY() * 8 + ruutu.getSijainti().getX());
         PiirrettavaRuutu.setBackground(vari);
     }
+
+    public void uusiPeli() {
+        Lauta uusiLauta = new Lauta();
+        uusiLauta.generoiNappulat();
+        lauta = uusiLauta;
+        varitaRuudukko();
+        piirraNappulat();
+        getContentPane().validate();
+        getContentPane().repaint();
+        voittoikkuna = null;
+    }
+
 }

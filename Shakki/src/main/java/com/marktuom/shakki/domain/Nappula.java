@@ -12,25 +12,44 @@ import java.util.Collection;
  */
 public abstract class Nappula {
 
+    /**
+     * Vari joka kuvaa nappulan omistavaa pelaajaa
+     */
     private final Vari vari;
-    protected final Lauta lauta;
-    protected Ruutu ruutu;
     
     /**
-     * Sotilas, Torni ja Kuningas tarvitsevat tätä erikoissiirtojensa ehdoissa
+     * Lauta johon nappula liittyy
+     */
+    protected final Lauta lauta;
+    
+    /**
+     * Ruutu laudalla jossa nappula sijaitsee
+     */
+    protected Ruutu ruutu;
+
+    /**
+     * Siirtolaskuri
      */
     protected int siirtoja;
 
+    /**
+     * Asettaa nappulan ruudun
+     * @param ruutu Ruutu joka halutaan asettaa nappulalle
+     */
     public void setRuutu(Ruutu ruutu) {
         this.ruutu = ruutu;
     }
 
+    /**
+     * Palauttaa nappulan siirtojen lukumäärän
+     * @return siirtojen lukumäärä
+     */
     public int getSiirtoja() {
         return siirtoja;
     }
 
     /**
-     *
+     * Luo uuden nappulan sekä asettaa itsensä sille annetun ruudun nappulaksi
      * @param lauta Lauta jolla nappulan ruutu sijaitsee
      * @param ruutu Ruutu jossa nappulan halutaan sijaitsevan
      * @param vari Nappulan väri
@@ -57,9 +76,7 @@ public abstract class Nappula {
             return false;
         }
         this.siirtoja++;
-        this.ruutu.poistaNappula();
-        this.ruutu = kohde;
-        this.ruutu.setNappula(this);
+        asetaRuutuun(kohde);
         return true;
     }
 
@@ -74,7 +91,7 @@ public abstract class Nappula {
     public abstract Collection<Ruutu> mahdollisetSiirrot();
 
     /**
-     * Tutkii mihin ruutuihin nappula voi liikkua shakki tilanteet huomioiden
+     * Tutkii mihin ruutuihin nappula voi liikkua shakki -tilanteet huomioiden
      *
      * @return Palauttaa Collectionin ruuduista joihin nappulan voidaan siirtää
      *
@@ -87,9 +104,7 @@ public abstract class Nappula {
             Ruutu lahto = this.ruutu;
             Nappula poistettava = ruutu1.getNappula();
 
-            this.ruutu.poistaNappula();
-            this.ruutu = ruutu1;
-            this.ruutu.setNappula(this);
+            asetaRuutuun(ruutu1);
 
             if (lauta.shakissa(this.vari)) {
                 laittomat.add(ruutu1);
@@ -107,18 +122,45 @@ public abstract class Nappula {
     }
 
     /**
+     * asettaa nappulan ruuduksi määrätyn ruudun ja poistaa nappulan vanhasta
+     * ruudusta
+     * @param ruutu Ruutu johon nappula laitetaan
+     */
+    protected void asetaRuutuun(Ruutu ruutu) {
+        this.ruutu.poistaNappula();
+        this.ruutu = ruutu;
+        this.ruutu.setNappula(this);
+    }
+    
+    /**
+     * asettaa lähto -ruudun nappulan ruuduksi kohde ruudun ja poistaa nappulan lähdöstä
+     * ruudusta
+     * 
+     * @param lahto ruutu jossa alove nappula halutaan uudelleensijoittaa
+     * @param kohde ruutu johon nappula sijoitetaan
+     */
+    protected void asetaRuutuun(Ruutu lahto, Ruutu kohde) {
+        lahto.getNappula().setRuutu(kohde);
+        kohde.setNappula(lahto.getNappula());
+        lahto.poistaNappula();
+    }
+
+    /**
      * Palauttaa listan vapaista ruuduista määrätyllä linjalla
-     * @param xMuutos 1, 0 tai -1 sen mukaan mihin suuntaan siirrot halutaan tutkia x-akselin suhteen
-     * @param Ymuutos 1, 0 tai -1 sen mukaan mihin suuntaan siirrot halutaan tutkia y-akselin suhteen
-     * @return 
+     *
+     * @param xMuutos 1, 0 tai -1 sen mukaan mihin suuntaan siirrot halutaan
+     * tutkia x-akselin suhteen
+     * @param Ymuutos 1, 0 tai -1 sen mukaan mihin suuntaan siirrot halutaan
+     * tutkia y-akselin suhteen
+     * @return
      */
     protected Collection<Ruutu> mahdollisetSiirrotSuuntaan(int xMuutos, int Ymuutos) {
-        if(Math.abs(xMuutos) > 1 || Math.abs(Ymuutos) > 1){
+        if (Math.abs(xMuutos) > 1 || Math.abs(Ymuutos) > 1) {
             return null;
         }
         ArrayList<Ruutu> siirrot = new ArrayList<>();
         for (int i = 1; i < 8; i++) {
-            Ruutu mahdollinenKohde = lauta.getRuutu(this.ruutu.getSijainti().getX() + (i*xMuutos), this.ruutu.getSijainti().getY() + (i*Ymuutos));
+            Ruutu mahdollinenKohde = lauta.getRuutu(this.ruutu.getSijainti().getX() + (i * xMuutos), this.ruutu.getSijainti().getY() + (i * Ymuutos));
             if (mahdollinenKohde == null || (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() == this.getVari())) {
                 break;
             }
@@ -131,8 +173,18 @@ public abstract class Nappula {
         return siirrot;
     }
 
+    /**
+     * Palauttaa nappulan värin 
+     * @return Nappulan väri
+     */
     public Vari getVari() {
         return vari;
     }
 
+    /**
+     * Kasvattaa nappulan siirtolaskurin arvoa yhdellä
+     */
+    public void KasvataSiirtoja(){
+        this.siirtoja++;
+    }
 }

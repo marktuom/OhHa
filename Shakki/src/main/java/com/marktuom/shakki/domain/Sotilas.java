@@ -59,41 +59,52 @@ public class Sotilas extends Nappula {
 
         //siirto 2 eteen
         mahdollinenKohde = lauta.getRuutu(omaSijainti.getX(), omaSijainti.getY() + (this.getVari().getArvo() * 2));
-        if (this.siirtoja == 0 && mahdollinenKohde.getNappula() == null && !lauta.nappuloitaTiella(this.ruutu, mahdollinenKohde)) {
+        if (this.siirtoja == 0 && mahdollinenKohde.getNappula() == null && lauta.getRuutu(omaSijainti.getX(), omaSijainti.getY() + this.getVari().getArvo()).getNappula() == null) {
             mahdollisetKohteet.add(mahdollinenKohde);
         }
 
         //oikea eteenpäin
         mahdollinenKohde = lauta.getRuutu(omaSijainti.getX() + 1, omaSijainti.getY() + this.getVari().getArvo());
-        if (mahdollinenKohde != null && (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() != this.getVari())) {
-            mahdollisetKohteet.add(mahdollinenKohde);
-        }
-        //Oikea eteenpäin ohestalyönti
-        Ruutu ohestalyotava = lauta.getRuutu(omaSijainti.getX() + 1, omaSijainti.getY());
-        if (ohestalyotava != null) {
-            if (ohestalyotava.getNappula() instanceof Sotilas && ohestalyotava.getNappula().getVari() != this.getVari() && ohestalyotava.getNappula().siirtoja == 1) {
-                if (lauta.getVuoro() == ((Sotilas) ohestalyotava.getNappula()).getOhestalyotavaVuorolla()) {
-                    mahdollisetKohteet.add(mahdollinenKohde);
-                }
+        if (mahdollinenKohde != null) {
+            //Syönti
+            if (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() != this.getVari()) {
+                mahdollisetKohteet.add(mahdollinenKohde);
+            }
+
+            //ohestalyönti
+            if (ohestalyonti(1)) {
+                mahdollisetKohteet.add(mahdollinenKohde);
             }
         }
 
         //Vasen eteenpäin
         mahdollinenKohde = lauta.getRuutu(omaSijainti.getX() - 1, omaSijainti.getY() + this.getVari().getArvo());
-        if (mahdollinenKohde != null && (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() != this.getVari())) {
-            mahdollisetKohteet.add(mahdollinenKohde);
-        }
-        //Vasen eteenpäin ohestalyönti
-        ohestalyotava = lauta.getRuutu(omaSijainti.getX() - 1, omaSijainti.getY());
-        if (ohestalyotava != null) {
-            if (ohestalyotava.getNappula() instanceof Sotilas && ohestalyotava.getNappula().getVari() != this.getVari() && ohestalyotava.getNappula().siirtoja == 1) {
-                if (lauta.getVuoro() == ((Sotilas) ohestalyotava.getNappula()).getOhestalyotavaVuorolla()) {
-                    mahdollisetKohteet.add(mahdollinenKohde);
-                }
+        if (mahdollinenKohde != null) {
+            //Syönti
+            if (mahdollinenKohde.getNappula() != null && mahdollinenKohde.getNappula().getVari() != this.getVari()) {
+                mahdollisetKohteet.add(mahdollinenKohde);
+            }
+
+            //Ohestalyönti
+            if (ohestalyonti(-1)) {
+                mahdollisetKohteet.add(mahdollinenKohde);
             }
         }
 
         return mahdollisetKohteet;
+    }
+
+    private Boolean ohestalyonti(int suunta) {
+        Sijainti omaSijainti = this.ruutu.getSijainti();
+        Ruutu ohestalyotava = lauta.getRuutu(omaSijainti.getX() + suunta, omaSijainti.getY());
+        if (ohestalyotava != null) {
+            if (ohestalyotava.getNappula() instanceof Sotilas && ohestalyotava.getNappula().getVari() != this.getVari() && ohestalyotava.getNappula().siirtoja == 1) {
+                if (lauta.getVuoro() == ((Sotilas) ohestalyotava.getNappula()).getOhestalyotavaVuorolla()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public int getOhestalyotavaVuorolla() {

@@ -14,18 +14,20 @@ public class Lauta {
      * Taulukko ruutuja jotka muodostavat 8x8 pelilaudan
      */
     private final Ruutu[][] ruudukko;
-    
+
     /**
      * Vari joka kertoo kumman värisen nappulan siirtymävuoro on
      */
     private Vari vuorossa;
-    
-    private int vuoro;
-    
-    
+
     /**
-     * Luodaan uusi lauta ja siihen liittyvä ruudukko
-     * Lisäksi asetetaan valkoinen pelaaja siirtymisvuoroon
+     * Vuorossa olevan pelaajan väri
+     */
+    private int vuoro;
+
+    /**
+     * Luodaan uusi lauta ja siihen liittyvä ruudukko Lisäksi asetetaan
+     * valkoinen pelaaja siirtymisvuoroon
      */
     public Lauta() {
         ruudukko = new Ruutu[8][8];
@@ -41,10 +43,11 @@ public class Lauta {
     public Vari getVuorossa() {
         return vuorossa;
     }
-    
-/**
- * Luodaan ja asetetaan shakin nappulat niiden asianmukaisille aloituspaikoille ruudukossa
- */
+
+    /**
+     * Luodaan ja asetetaan shakin nappulat niiden asianmukaisille
+     * aloituspaikoille ruudukossa
+     */
     public void generoiNappulat() {
         for (int i = 0; i < 8; i++) {
             if (i == 0 || i == 7) {
@@ -75,6 +78,13 @@ public class Lauta {
         return ruudukko;
     }
 
+    /**
+     * Palauttaa korrdinaattien määrittämän ruudun laudalta
+     *
+     * @param x Halutun ruudun x-koordinaatti
+     * @param y Halutun ruudun y-koordinaatti
+     * @return Koordinaateissa sijaitseva ruutu tai null jos ruutua ei löydy
+     */
     public Ruutu getRuutu(int x, int y) {
         try {
             return ruudukko[y][x];
@@ -87,14 +97,15 @@ public class Lauta {
     public int getVuoro() {
         return vuoro;
     }
-    
-    
+
     /**
-     * Siirtää laudalla olevan pelinappulan mikäli siirto on sääntöjen mukainen ja vaihtaa vuoron toiselle pelaajalle.
-     * 
+     * Siirtää laudalla olevan pelinappulan mikäli siirto on sääntöjen mukainen
+     * ja vaihtaa vuoron toiselle pelaajalle.
+     *
      * @param lahto Ruutu jossa olevaa nappulaa halutaan siirtää
      * @param kohde Ruutu johon lahtoruudusssa oleva nappula halutaan siirtää
-     * @return Mikäli lahto sisältää nappulan ja se siirtyy ruutuun kohde palautetaan true. Muulloin palautetaan false;
+     * @return Mikäli lahto sisältää nappulan ja se siirtyy ruutuun kohde
+     * palautetaan true. Muulloin palautetaan false;
      */
     public boolean siirra(Ruutu lahto, Ruutu kohde) {
         if (lahto == null || kohde == null) {
@@ -104,14 +115,14 @@ public class Lauta {
         if (lahto.getNappula() == null) {
             return false;
         }
-        
-        if(lahto.getNappula().getVari() != vuorossa){
+
+        if (lahto.getNappula().getVari() != vuorossa) {
             return false;
         }
-        
-        if(lahto.getNappula().liiku(kohde)){
+
+        if (lahto.getNappula().liiku(kohde)) {
             vuoro++;
-            if(vuorossa == Vari.VALKOINEN){
+            if (vuorossa == Vari.VALKOINEN) {
                 vuorossa = Vari.MUSTA;
             } else {
                 vuorossa = Vari.VALKOINEN;
@@ -123,17 +134,34 @@ public class Lauta {
     }
 
     /**
-     * Tutkii onko halutun värisen pelaajan kuningas shakissa
-     * 
-     * @param pelaaja Pelaajan väri jonka kuninkaan shakki tilanne halutaan tarkistaa
+     * Tutkii onko parametrissa määrätyn värisen pelaajan kuningas shakissa
+     *
+     * @param pelaaja Pelaajan väri jonka kuninkaan shakki tilanne halutaan
+     * tarkistaa
      * @return Palauttaa true mikäli kuningas on shakissa, muulloin false
      */
     public boolean shakissa(Vari pelaaja) {
+        if (pelaaja == Vari.VALKOINEN) {
+            return uhkaa(kuninkaanRuutu(pelaaja), Vari.MUSTA);
+        } else {
+            return uhkaa(kuninkaanRuutu(pelaaja), Vari.VALKOINEN);
+        }
+    }
+
+    /**
+     * Tutkii voiko parametrissa määrätyn värinen pelaaja liikkua määrättyyn
+     * ruutuun
+     *
+     * @param kohde Ruutu johon siirtymistä tutkitaan
+     * @param pelaaja Pelaaja jonka siirroista ruutua etsitään
+     * @return True jos jokin nappula voi liikkua ruutuun, muulloin false
+     */
+    public boolean uhkaa(Ruutu kohde, Vari pelaaja) {
         ArrayList<Ruutu> siirrot = new ArrayList<>();
         for (Ruutu[] rivi : ruudukko) {
             for (Ruutu ruutu : rivi) {
                 if (ruutu.getNappula() != null) {
-                    if (ruutu.getNappula().getVari() != pelaaja) {
+                    if (ruutu.getNappula().getVari() == pelaaja) {
                         for (Ruutu siirto : ruutu.getNappula().mahdollisetSiirrot()) {
                             siirrot.add(siirto);
                         }
@@ -141,17 +169,17 @@ public class Lauta {
                 }
             }
         }
-        return siirrot.contains(kuninkaanRuutu(pelaaja));
+        return siirrot.contains(kohde);
     }
-   
-    
+
     /**
      * Etsii ja palauttaa halutun pelaajan kuninkaan sisältävän ruudun
-     * 
-     * @param pelaaja   Pelaaja jonka kuningas halutaan etsiä
-     * @return Ruutu jossa parametrina saadun pelaajan kuningas sijaitsee. Jos kuningasta ei löydy palautetaan null
+     *
+     * @param pelaaja Pelaaja jonka kuningas halutaan etsiä
+     * @return Ruutu jossa parametrina saadun pelaajan kuningas sijaitsee. Jos
+     * kuningasta ei löydy palautetaan null
      */
-    public Ruutu kuninkaanRuutu(Vari pelaaja){
+    public Ruutu kuninkaanRuutu(Vari pelaaja) {
         for (Ruutu[] rivi : ruudukko) {
             for (Ruutu ruutu : rivi) {
                 if (ruutu.getNappula() != null) {
@@ -166,9 +194,10 @@ public class Lauta {
 
     /**
      * Tutkii onko halutun värisen pelaajan kuningas matissa
-     * 
-     * @param pelaaja Pelaajan väri jonka kuninkaan matti tilanne halutaan tarkistaa
-     * @return 
+     *
+     * @param pelaaja Pelaajan väri jonka kuninkaan matti tilanne halutaan
+     * tarkistaa
+     * @return
      */
     public boolean matissa(Vari pelaaja) {
         if (!shakissa(pelaaja)) {
@@ -190,9 +219,12 @@ public class Lauta {
 
     /**
      * Tutkii onko kahden samalla linjalla olevien ruutujen välillä nappuloita
+     *
      * @param lahto Tutkittavan välin alku
      * @param kohde Tutkittavan välin loppu
-     * @return Mikäli ruudut eivät ole linjassa tai niiden välillä ei ole nappuloita palautetaan false. Mikäli väliltä löytyy yksikin nappula palautetaan true;
+     * @return Mikäli ruudut eivät ole linjassa tai niiden välillä ei ole
+     * nappuloita palautetaan false. Mikäli väliltä löytyy yksikin nappula
+     * palautetaan true;
      */
     public boolean nappuloitaTiella(Ruutu lahto, Ruutu kohde) {
         Sijainti alku = lahto.getSijainti();
