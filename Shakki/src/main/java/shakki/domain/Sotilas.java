@@ -71,7 +71,7 @@ public class Sotilas extends Nappula {
 
         //siirto 2 eteen
         mahdollinenKohde = lauta.getRuutu(omaSijainti.getX(), omaSijainti.getY() + (this.getVari().getArvo() * 2));
-        if (this.siirtoja == 0 && mahdollinenKohde.getNappula() == null && lauta.getRuutu(omaSijainti.getX(), omaSijainti.getY() + this.getVari().getArvo()).getNappula() == null) {
+        if (mahdollinenKohde != null && this.siirtoja == 0 && mahdollinenKohde.getNappula() == null && lauta.getRuutu(omaSijainti.getX(), omaSijainti.getY() + this.getVari().getArvo()).getNappula() == null) {
             mahdollisetKohteet.add(mahdollinenKohde);
         }
 

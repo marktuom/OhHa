@@ -31,10 +31,10 @@ public class Kuningas extends Nappula {
     @Override
     public boolean liiku(Ruutu kohde) {
         Ruutu torninRuutu = null;
-        int xErotus = kohde.getSijainti().xMuutos(ruutu.getSijainti());
+        int xErotus = kohde.getSijainti().xErotus(ruutu.getSijainti());
         if (Math.abs(xErotus) == 2) {
             int torninX;
-            if (xErotus == 2) {
+            if (xErotus == -2) {
                 torninX = 7;
             } else {
                 torninX = 0;

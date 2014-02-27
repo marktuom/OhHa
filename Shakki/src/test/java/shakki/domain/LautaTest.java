@@ -5,15 +5,7 @@
  */
 package shakki.domain;
 
-import shakki.domain.Sotilas;
-import shakki.domain.Nappula;
-import shakki.domain.Torni;
-import shakki.domain.Lauta;
-import shakki.domain.Kuningatar;
-import shakki.domain.Vari;
-import shakki.domain.Ratsu;
-import shakki.domain.Ruutu;
-import shakki.domain.Kuningas;
+import shakki.domain.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -69,11 +61,15 @@ public class LautaTest {
         assertEquals(true, r1[7][6].getNappula() instanceof Ratsu);
     }
 
-
     @Test
     public void TestSiirra() {
 
         Ruutu[][] r1 = l1.getRuudukko();
+
+        assertEquals(false, l1.siirra(null, r1[7][7]));
+        assertEquals(false, l1.siirra(r1[6][6], null));
+        assertEquals(false, l1.siirra(r1[3][3], r1[7][7]));
+
         r1[3][3].setNappula(new Kuningatar(l1, r1[3][3], Vari.MUSTA));
         r1[4][4].setNappula(new Ratsu(l1, r1[4][4], Vari.MUSTA));
         r1[5][2].setNappula(new Ratsu(l1, r1[5][2], Vari.VALKOINEN));
@@ -105,14 +101,35 @@ public class LautaTest {
         Nappula n2 = new Torni(l1, r1, Vari.VALKOINEN);
 
         assertEquals(false, l1.matissa(Vari.MUSTA));
-        
+
         Nappula n3 = new Torni(l1, l1.getRuutu(4, 3), Vari.VALKOINEN);
         Nappula n4 = new Torni(l1, l1.getRuutu(4, 5), Vari.VALKOINEN);
-        
+
         assertEquals(true, l1.matissa(Vari.MUSTA));
-        
+
         Nappula n5 = new Sotilas(l1, l1.getRuutu(1, 4), Vari.VALKOINEN);
         assertEquals(false, l1.matissa(Vari.MUSTA));
-  
+
     }
+
+    @Test
+    public void TestgetVuorossa() {
+        assertEquals(Vari.VALKOINEN, l1.getVuorossa());
+    }
+
+    @Test
+    public void TestgetVuoro() {
+        assertEquals(1, l1.getVuoro());
+    }
+
+    @Test
+    public void TestTasapeli() {
+        Nappula n1 = new Kuningas(l1, l1.getRuutu(0, 0), Vari.VALKOINEN);
+        Nappula n2 = new Torni(l1, l1.getRuutu(2, 1), Vari.MUSTA);
+        Nappula n3 = new Torni(l1, l1.getRuutu(1, 2), Vari.MUSTA);
+        assertEquals(true, l1.tasapeli());
+        Nappula n4 = new Lahetti(l1, l1.getRuutu(3, 3), Vari.MUSTA);
+        assertEquals(false, l1.tasapeli());
+    }
+
 }

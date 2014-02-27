@@ -44,7 +44,7 @@ public class KuningasTest {
         l1 = new Lauta();
         k1 = new Kuningas(l1, l1.getRuutu(2, 2), Vari.MUSTA);
         k2 = new Kuningas(l1, l1.getRuutu(0, 0), Vari.VALKOINEN);
-      
+
     }
 
     @After
@@ -65,20 +65,50 @@ public class KuningasTest {
     }
 
     @Test
-    public void TestMahdollisetSiirrot(){
+    public void TestMahdollisetSiirrot() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (!(i == 1 && j == 1)) {
-                    assertEquals(true, k1.mahdollisetSiirrot().contains(l1.getRuutu(j+1, i+1)));
+                    assertEquals(true, k1.mahdollisetSiirrot().contains(l1.getRuutu(j + 1, i + 1)));
                 }
             }
         }
         assertEquals(false, k1.mahdollisetSiirrot().contains(l1.getRuutu(2, 2)));
     }
-    
+
     @Test
     public void TestLiiku() {
         assertEquals(true, k1.liiku(l1.getRuutu(3, 3)));
         assertEquals(true, l1.getRuutu(3, 3).getNappula() instanceof Kuningas);
+    }
+
+    @Test
+    public void TestTornitusOikealle() {
+        Nappula n1 = new Kuningas(l1, l1.getRuutu(4, 7), Vari.VALKOINEN);
+        Nappula n2 = new Torni(l1, l1.getRuutu(7, 7), Vari.VALKOINEN);
+        assertEquals(true, n1.mahdollisetSiirrot().contains(l1.getRuutu(6, 7)));
+        assertEquals(true, n1.laillisetSiirrot().contains(l1.getRuutu(6, 7)));
+        Nappula n3 = new Torni(l1, l1.getRuutu(5, 5), Vari.MUSTA);
+        assertEquals(false, n1.laillisetSiirrot().contains(l1.getRuutu(6, 7)));
+        assertEquals(false, n1.liiku(l1.getRuutu(6, 7)));
+        l1.getRuutu(5, 5).poistaNappula();
+        assertEquals(true, n1.liiku(l1.getRuutu(6, 7)));
+        assertEquals(true, l1.getRuutu(5, 7).getNappula() instanceof Torni);
+        assertEquals(null, l1.getRuutu(7, 7).getNappula());
+    }
+
+    @Test
+    public void TestTornitusVasemmalle() {
+        Nappula n1 = new Kuningas(l1, l1.getRuutu(4, 7), Vari.VALKOINEN);
+        Nappula n2 = new Torni(l1, l1.getRuutu(0, 7), Vari.VALKOINEN);
+        assertEquals(true, n1.mahdollisetSiirrot().contains(l1.getRuutu(2, 7)));
+        assertEquals(true, n1.laillisetSiirrot().contains(l1.getRuutu(2, 7)));
+        Nappula n3 = new Torni(l1, l1.getRuutu(3, 5), Vari.MUSTA);
+        assertEquals(false, n1.laillisetSiirrot().contains(l1.getRuutu(2, 7)));
+        assertEquals(false, n1.liiku(l1.getRuutu(2, 7)));
+        l1.getRuutu(3, 5).poistaNappula();
+        assertEquals(true, n1.liiku(l1.getRuutu(2, 7)));
+        assertEquals(true, l1.getRuutu(3, 7).getNappula() instanceof Torni);
+        assertEquals(null, l1.getRuutu(0, 7).getNappula());
     }
 }
