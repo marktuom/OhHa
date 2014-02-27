@@ -1,0 +1,10 @@
+Peli noudattaa shakin sääntöjä, joista voi lukea tarkemmin vaikkapa täältä: http://fi.wikipedia.org/wiki/Shakki
+Peli ei sisällä muita tasapelitilanteiden tarkistuksia kuin pattitilanteiden tarkistuksen.
+Muut tasapelit voidaan kuitenkin oikean shakin tapaan sopia toisen pelaajan kanssa. Tällöin peli joudutaan tosin käynnistämään uudelleen uutta erää varten.
+
+Peliä pelataan hiirtä käyttäen. Hiiri viedään halutun nappulan päälle, painetaan hiiren vasen painike pohjaan, raahataan nappula halutun ruudun päälle ja vapautetaan hiiren painike.
+Mikäli valitulla nappulalla on laillisia siirtoja, korostetaan ne vihreällä.
+
+Valkoinen pelaaja (Ruudun alalaidasta aloittavat nappulat) on siirtovuorosssa ensin. Kun pelaaja suorittaa laillisen siirron, siirtyy siirtovuoro toiselle pelaajalle.
+
+Nappulat piirretään käyttäen unicodea ja mikäli ei tunnista mitä nappulaa mikäkin kuvake edustaa löytää apua vaikkapa täältä: http://en.wikipedia.org/wiki/Chess_symbols_in_Unicode

@@ -142,11 +142,13 @@ public class Lauta {
      * @return Palauttaa true mikäli kuningas on shakissa, muulloin false
      */
     public boolean shakissa(Vari pelaaja) {
+        Vari vastustaja;
         if (pelaaja == Vari.VALKOINEN) {
-            return uhkaa(kuninkaanRuutu(pelaaja), Vari.MUSTA);
+            vastustaja = Vari.MUSTA;
         } else {
-            return uhkaa(kuninkaanRuutu(pelaaja), Vari.VALKOINEN);
+            vastustaja = Vari.VALKOINEN;
         }
+        return uhkaa(kuninkaanRuutu(pelaaja), vastustaja);
     }
 
     /**

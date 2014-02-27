@@ -1,6 +1,7 @@
 Aihe: Shakki
 Toteutetaan Shakki peli. 
-Pelin on tarkoitus toimia mahdollisimman tarkasti varsinaisen lautapelin sääntöjen mukaisesti. Nappuloiden siirrot noudattavat oikean shakin sääntöjä. Peli loppuu tasapeliin tai toisen pelaajan voittoon oikean pelin sääntöjen mukaisesti. Vaikka nappulaa yrittää siirtää epäonnistuneesti (esim. siirtää paikallaan) on silti mahdollista siirtä toista nappulaa samalla vuorolla.
+Pelin on tarkoitus toimia varsinaisen lautapelin sääntöjen mukaisesti. Nappuloiden siirrot tapahtuvat oikean shakin sääntöjen mukaan. Peli loppuu tasapeliin tai toisen pelaajan voittoon. Tarkat säännöt voi katsoa helposti esimerkiksi internetistä. Muuten säänöt noudattavat oikean shakin sääntöjä, mutta tasapelitilanteista huomioidaan vain pattitilanteet. Lisäksi on mahdollista siirtää toista nappulaa vaikka olisi jo "koskenut" jotakin muuta nappulaa kyseisellä vuorolla.
+Peli ei sisällä shakki-kelloa.
 
 Peliä pelataan graafisen käyttöliittymän kautta hiirellä. Nappuloiden siirtäminen tapahtuu raahaamalla haluttu nappula uuteen ruutuun.
 

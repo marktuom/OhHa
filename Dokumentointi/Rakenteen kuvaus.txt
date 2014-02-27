@@ -1,0 +1,4 @@
+Shakin nappulat ovat nappulan yliluokasta eriytettyj‰ aliluokkia. Kutakin shakin nappulaa vastaa yksi aliluokka. Kaikilla nappuloilla on jokin v‰ri jolla erotellaan nappulat mustiin ja valkoisiin. Kaikki nappulat tuntevat pelilaudan mill‰ ne sijaitsevat.
+Kukin nappula sijaitsee jossakin ruudussa. Ruutu tuntee nappulansa ja ruudulla on sijainti joka sis‰t‰‰ sen X ja Y koordinaatit laudan ruudukossa.
+Lauta sis‰lt‰‰ ruudukon, eli taulukon ruutuja, ja v‰rin joka kertoo vuorossa olevan pelaajan. 
+ShakkilautaUI on k‰yttˆliittym‰luokka joka piirt‰‰ lautaa vastaavan pelitilanteen. Kun peli loppuu se luo PeliOhiIkkunaUIn ilmentym‰n joka puolestaan ilmoittaa pelin loppuneen.
