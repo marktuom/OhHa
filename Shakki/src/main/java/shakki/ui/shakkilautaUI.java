@@ -22,17 +22,45 @@ import javax.swing.*;
  */
 public class shakkilautaUI extends JFrame implements MouseListener, MouseMotionListener {
 
+    /**
+     * LayredPane joka sisältää laudan ruudukon ja siirrettävät nappulat
+     */
     JLayeredPane layeredPane;
+    
+    /**
+     * Laudan pohjana toimiva ruudukko
+     */
     JPanel shakkilauta;
+    
+    /**
+     * Siirrettävä nappula
+     */
     JLabel shakkinappula;
 
+    /**
+     * Logiikan pelilauta joka vastaa pelin toiminnasta ja nappuloiden sijainneista
+     */
     Lauta lauta;
+    
+    /**
+     * Ruutu jossa olevaan nappulaa yritetään siirtää
+     */
     Ruutu lahto;
 
+    /*
+    Raahattavan nappulan oikean sijainnin laskemiseen käytettäviä apumuuttujia
+    */
     int xKorjaus;
     int yKorjaus;
+    
+    /**
+     * Pelilaudan sivun pituus
+     */
     int koko;
 
+    /**
+     * Pelin päätyttyä aukeava ikkuna
+     */
     JFrame voittoikkuna;
 
     /**

@@ -1,0 +1,37 @@
+Kumpaakaan käyttöliittymäluokkaa tai Main luokkaa ei ole testattu automaattisesti.
+Main luokka sisältää yhden rivin koodia ja ohjelma käynnistyy hyvin joten katon tämän yhden rivin riittävän toimintavarmaksi.
+
+Käyttöliittymää on testattu pelaamalla peliä käyttöliittymän kautta ja yrittämällä tehdä laittomia toimintoja käyttäen käyttöliittymää. 
+
+Käyttöliittymässä testattuja asioita:
+-Normaali toiminta
+	-lailliset siirrot korostettuihin ruutuihin
+		-Erikoissiirrot
+	-Shakkaaminen
+	-Pelin loppuminen
+		-Valkoisen tai mustan voitoon
+		-Tasapeliin
+	-Uuden pelin aloitus
+	-Pelin sulkeminen
+		-Painamalla X
+		-PeliOhiIkkunan sulje painikkeella
+-Laittomat siirrot
+	-Siirto pois laudalta
+	-Siirto ruutuun jota ei korosteta
+		-Jossa nappula
+			-Vastustajan
+			-Oma
+		-joka tyhjä
+-Spam!
+	-Näppäimistön näppäimien painelu
+	-Hiiren näppäimien toistuva hakkaaminen
+		-Ruutuihin
+		-Ruutujen ulkopuolelle
+	-Toistuvat siirtoyritykset
+	-Useita lähes samanaikaisia laillisia siirtoja
+-Muuta
+	-Ikkunan pienentäminen ja palauttaminen
+	-Siirron tekeminen ja aktiivisen ikkunan vaihtaminen
+	-Aktiivisen ikkunan vaihtaminen pelin loputtua
+
+Ohjelman kaatavia virhetilanteita ei esiintynyt
